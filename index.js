@@ -27,8 +27,35 @@ async function run() {
 
     const taskCollection = client.db('TaskifyHubDB').collection('tasks');
 
-    
+    app.post('/tasks', async (req, res) => {
+      const newTask = req.body;
+      const result = await taskCollection.insertOne(newTask);
+      res.send(result);
+    })
 
+    app.get('/tasks' , async(req, res) => {
+      const result = await taskCollection.find().toArray();
+      res.json(result);
+    })
+
+    // app.get('/tasks', async (req, res) => {
+    //   const { userEmail, type } = req.query;
+    //   console.log(' userEmail:', userEmail, 'type:', type);
+    
+    //   try {
+    //     const query = {
+    //       userEmail: { $eq: userEmail },
+    //       type: { $eq: type }
+    //     };
+    
+    //     const result = await taskCollection.find(query).toArray();
+    //     res.json(result);
+    //   } catch (error) {
+    //     console.error('Error fetching tasks:', error);
+    //     res.status(500).json({ error: 'Internal Server Error' });
+    //   }
+    // });
+    
 
 
 
@@ -48,9 +75,9 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-    res.send('taskify is sitting')
+  res.send('taskify is sitting')
 })
 
-app.listen(port , () => {
-    console.log(`taskify is sitting on port ${port}`);
+app.listen(port, () => {
+  console.log(`taskify is sitting on port ${port}`);
 })
